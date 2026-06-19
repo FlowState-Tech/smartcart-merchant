@@ -5,6 +5,7 @@ import com.smartcart_merchant.BuildConfig
 import com.smartcart_merchant.core.network.AuthInterceptor
 import com.smartcart_merchant.core.storage.SessionPreferences
 import com.smartcart_merchant.features.auth.data.remote.api.AuthApi
+import com.smartcart_merchant.features.verification.data.remote.api.VerificationApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -61,5 +62,11 @@ object AppModule {
     @Singleton
     fun provideAuthApi(retrofit: Retrofit): AuthApi {
         return retrofit.create(AuthApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideVerificationApi(retrofit: Retrofit): VerificationApi {
+        return retrofit.create(VerificationApi::class.java)
     }
 }
