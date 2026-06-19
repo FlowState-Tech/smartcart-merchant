@@ -12,25 +12,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
-// 🌙 Esquema de colores para Tema Oscuro
 private val DarkColorScheme = darkColorScheme(
-    primary = SmartCyan,            // El cian resalta excelente en fondo oscuro
+    primary = SmartCyan,
     secondary = SmartBlue,
     tertiary = SmartGreen,
     background = DarkBackground,
     surface = DarkSurface,
-    onPrimary = Color.Black,        // Texto negro sobre botones cian para legibilidad
+    onPrimary = Color.Black,
     onSecondary = Color.White,
     onTertiary = Color.Black
 )
 
-// ☀️ Esquema de colores para Tema Claro
 private val LightColorScheme = lightColorScheme(
-    primary = SmartBlue,            // El azul funciona genial como color predominante en claro
-    secondary = SmartCyan,          // Para componentes como los botones redondeados de tu UI
-    tertiary = SmartGreen,          // Para acentos, contadores o detalles específicos
-    background = LightBackground,   // Fondo grisáceo muy tenue
-    surface = LightSurface,         // Tarjetas blancas como el bloque "Información del Proyecto"
+    primary = SmartBlue,
+    secondary = SmartCyan,
+    tertiary = SmartGreen,
+    background = LightBackground,
+    surface = LightSurface,
     onPrimary = Color.White,
     onSecondary = Color.White,
     onTertiary = Color.Black,
