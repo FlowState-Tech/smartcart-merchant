@@ -19,14 +19,14 @@ android {
         minSdk = 34
         targetSdk = 36
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         debug {
-            buildConfigField("String", "API_BASE_URL", "\"http://10.0.2.2:8080/api/v1/\"")
+            buildConfigField("String", "API_BASE_URL", "\"https://smartcart-api-production.up.railway.app/api/v1/\"")
             buildConfigField("Boolean", "LOG_HTTP", "true")
         }
         release {
@@ -70,6 +70,7 @@ dependencies {
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
+    implementation(libs.okhttp.logging.interceptor)
 
     // Coil
     implementation(libs.coil.compose)
@@ -92,6 +93,9 @@ dependencies {
 
     // Hilt
     implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation.compose)
     ksp(libs.hilt.compiler)
 
+    implementation(libs.androidx.datastore.preferences)
+    ksp(libs.androidx.datastore.preferences)
 }
