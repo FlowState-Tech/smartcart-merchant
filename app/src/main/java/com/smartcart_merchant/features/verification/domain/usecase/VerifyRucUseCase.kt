@@ -26,7 +26,8 @@ class VerifyRucUseCase @Inject constructor(
             if (verification.status == com.smartcart_merchant.features.verification.domain.model.VerificationStatus.VERIFIED) {
                 sessionPreferences.saveVerificationStatus(
                     applicationId = verification.applicationId,
-                    companyName = verification.companyName
+                    companyName = verification.companyName,
+                    ruc = verification.ruc
                 )
             }
         }
