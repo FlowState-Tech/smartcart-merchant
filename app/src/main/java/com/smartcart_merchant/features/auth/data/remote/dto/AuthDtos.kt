@@ -8,7 +8,7 @@ data class SignInRequestDto(
 )
 
 data class SignInResponseDto(
-    @SerializedName("id") val id: String,
+    @SerializedName("id") val id: Long,
     @SerializedName("username") val username: String,
     @SerializedName("token") val token: String,
 )
@@ -20,6 +20,7 @@ data class SignUpRequestDto(
 )
 
 data class SignUpResponseDto(
-    @SerializedName("id") val id: String, 
-    @SerializedName("username") val username: String
+    @SerializedName("id") val id: Long,
+    @SerializedName("username") val username: String,
+    @SerializedName("roles") val roles: List<String>? = null
 )

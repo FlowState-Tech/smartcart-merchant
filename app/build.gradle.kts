@@ -7,6 +7,23 @@ plugins {
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
+import java.util.Properties
+
+val envProperties = Properties().apply {
+    val envFile = rootProject.file("env.properties")
+    if (envFile.exists()) {
+        envFile.inputStream().use { load(it) }
+    }
+}
+val apiBaseUrl = envProperties.getProperty(
+    "API_BASE_URL",
+    "https://smartcart-api-production.up.railway.app/api/v1/"
+).let { url -> if (url.endsWith("/")) url else "$url/" }
+val landingBaseUrl = envProperties.getProperty(
+    "LANDING_BASE_URL",
+    "https://flowstatetech-smartcart.netlify.app/"
+).let { url -> if (url.endsWith("/")) url else "$url/" }
+
 android {
     namespace = "com.smartcart_merchant"
     compileSdk {
@@ -27,11 +44,13 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "API_BASE_URL", "\"https://smartcart-api-production.up.railway.app/api/v1/\"")
+            buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrl\"")
+            buildConfigField("String", "LANDING_BASE_URL", "\"$landingBaseUrl\"")
             buildConfigField("Boolean", "LOG_HTTP", "true")
         }
         release {
-            buildConfigField("String", "API_BASE_URL", "\"https://smartcart-api-production.up.railway.app/api/v1/\"")
+            buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrl\"")
+            buildConfigField("String", "LANDING_BASE_URL", "\"$landingBaseUrl\"")
             buildConfigField("Boolean", "LOG_HTTP", "false")
             isMinifyEnabled = false
             proguardFiles(
@@ -59,6 +78,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -87,10 +107,10 @@ dependencies {
     // Kotlin serialization
     implementation(libs.kotlin.serialization)
 
-    // Room
-    implementation(libs.room.runtime)
-    implementation(libs.room.ktx)
-    ksp(libs.room.compiler)
+    // Room (reservado para caché offline futuro)
+    // implementation(libs.room.runtime)
+    // implementation(libs.room.ktx)
+    // ksp(libs.room.compiler)
 
     // Hilt
     implementation(libs.hilt.android)
@@ -103,6 +123,7 @@ dependencies {
     // Google Maps
     implementation(libs.maps.compose)
     implementation(libs.play.services.maps)
+    implementation(libs.zxing.core)
 }
 
 secrets {

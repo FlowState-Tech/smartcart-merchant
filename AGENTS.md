@@ -177,6 +177,7 @@ Store Setup
 - `company_name`
 - `application_id`
 - `ruc`
+- `store_id`
 
 El `AuthInterceptor` lee el token de forma síncrona con `runBlocking` y lo agrega al header `Authorization: Bearer <token>`.
 
@@ -229,6 +230,7 @@ Endpoints conocidos:
 - Auth: `POST auth/sign-in`, `POST auth/sign-up`
 - Verification: `POST verification/verify`
 - Store: `POST store-management/stores`, `GET store-management/stores/{storeId}`
+- Dashboard: `GET store-management/stores/{storeId}/analytics`, `GET .../inventory`, `POST .../inventory/bulk`, `POST .../inventory/clearance`
 
 Nota: Algunos endpoints devuelven respuestas no estandarizadas. Por ejemplo, `POST store-management/stores` devuelve solo el `storeId` como número, no el objeto completo. El repositorio debe manejar esto extrayendo el ID y haciendo un GET posterior si es necesario.
 

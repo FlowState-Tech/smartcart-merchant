@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import com.smartcart_merchant.BuildConfig
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.smartcart_merchant.core.network.AuthEventBus
 import com.smartcart_merchant.core.storage.SessionPreferences
 import com.smartcart_merchant.features.auth.presentation.ui.screens.SignInScreen
 import com.smartcart_merchant.features.auth.presentation.ui.screens.SignUpScreen
@@ -29,9 +30,23 @@ enum class AppScreen {
     DASHBOARD
 }
 
+private suspend fun resolveDestination(sessionPreferences: SessionPreferences): AppScreen {
+    val hasSession = sessionPreferences.authToken.first() != null
+    if (!hasSession) return AppScreen.AUTH
+
+    val verified = sessionPreferences.isVerified.first()
+    if (!verified) return AppScreen.VERIFICATION
+
+    val storeId = sessionPreferences.storeId.first()
+    if (storeId.isNullOrBlank()) return AppScreen.STORE_SETUP
+
+    return AppScreen.DASHBOARD
+}
+
 @Composable
 fun AppNavigation(
     sessionPreferences: SessionPreferences,
+    authEventBus: AuthEventBus,
     modifier: Modifier = Modifier
 ) {
     val navController = rememberNavController()
@@ -42,11 +57,15 @@ fun AppNavigation(
 
     LaunchedEffect(isVerified) {
         if (currentScreen == AppScreen.SPLASH) {
-            val hasSession = sessionPreferences.authToken.first() != null
-            currentScreen = if (hasSession) {
-                if (isVerified) AppScreen.DASHBOARD else AppScreen.VERIFICATION
-            } else {
-                AppScreen.AUTH
+            currentScreen = resolveDestination(sessionPreferences)
+        }
+    }
+
+    LaunchedEffect(authEventBus) {
+        authEventBus.sessionExpired.collect {
+            scope.launch {
+                sessionPreferences.clearSession()
+                currentScreen = AppScreen.AUTH
             }
         }
     }
@@ -67,8 +86,7 @@ fun AppNavigation(
                         },
                         onLoginSuccess = {
                             scope.launch {
-                                val verified = sessionPreferences.isVerified.first()
-                                currentScreen = if (verified) AppScreen.DASHBOARD else AppScreen.VERIFICATION
+                                currentScreen = resolveDestination(sessionPreferences)
                             }
                         }
                     )
@@ -78,6 +96,11 @@ fun AppNavigation(
                     SignUpScreen(
                         onNavigateToSignIn = {
                             navController.popBackStack()
+                        },
+                        onSignUpSuccess = {
+                            scope.launch {
+                                currentScreen = resolveDestination(sessionPreferences)
+                            }
                         }
                     )
                 }

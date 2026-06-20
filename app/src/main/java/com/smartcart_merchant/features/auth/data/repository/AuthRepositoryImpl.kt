@@ -27,7 +27,7 @@ class AuthRepositoryImpl @Inject constructor(
                 Log.d(TAG, "Response body: $body")
                 if (body != null) {
                     val session = Session(
-                        id = body.id,
+                        id = body.id.toString(),
                         username = body.username,
                         token = body.token,
                         roles = listOf("ROLE_MERCHANT")
@@ -60,10 +60,10 @@ class AuthRepositoryImpl @Inject constructor(
                 Log.d(TAG, "Response body: $body")
                 if (body != null) {
                     val session = Session(
-                        id = body.id,
+                        id = body.id.toString(),
                         username = body.username,
                         token = "",
-                        roles = listOf("ROLE_MERCHANT")
+                        roles = body.roles?.takeIf { it.isNotEmpty() } ?: listOf("ROLE_MERCHANT")
                     )
                     Log.d(TAG, "Sign-up successful for user: ${session.username}")
                     Resource.Success(session)

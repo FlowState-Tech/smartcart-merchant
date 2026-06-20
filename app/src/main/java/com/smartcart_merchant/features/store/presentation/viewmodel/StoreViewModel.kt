@@ -139,10 +139,20 @@ class StoreViewModel @Inject constructor(
 
             when (val result = createStoreUseCase(store)) {
                 is Resource.Success -> {
+                    result.data?.id?.let { storeId ->
+                        sessionPreferences.saveStoreId(storeId)
+                    }
                     _uiState.update { it.copy(isLoading = false, isSuccess = true) }
                 }
                 is Resource.Error -> {
-                    _uiState.update { it.copy(isLoading = false, error = result.message) }
+                    val message = when {
+                        result.message?.contains("Duplicate branch coordinates", ignoreCase = true) == true ->
+                            "Ya existe una sucursal registrada en estas coordenadas (US10 E3)."
+                        result.message?.contains("RUC already exists", ignoreCase = true) == true ->
+                            "El RUC ya está registrado en el sistema."
+                        else -> result.message
+                    }
+                    _uiState.update { it.copy(isLoading = false, error = message) }
                 }
                 is Resource.Loading -> { }
             }
