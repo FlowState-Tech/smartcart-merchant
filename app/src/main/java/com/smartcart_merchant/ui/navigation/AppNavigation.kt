@@ -4,77 +4,43 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import com.smartcart_merchant.BuildConfig
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.smartcart_merchant.core.network.AuthEventBus
-import com.smartcart_merchant.core.storage.SessionPreferences
 import com.smartcart_merchant.features.auth.presentation.ui.screens.SignInScreen
 import com.smartcart_merchant.features.auth.presentation.ui.screens.SignUpScreen
+import com.smartcart_merchant.features.merchant.presentation.viewmodel.SplashDestination
+import com.smartcart_merchant.features.merchant.presentation.viewmodel.SplashViewModel
 import com.smartcart_merchant.features.verification.presentation.ui.screens.VerificationScreen
 import com.smartcart_merchant.features.store.presentation.ui.screens.StoreScreen
 import com.smartcart_merchant.ui.screens.MainDashboardScreen
 import com.smartcart_merchant.ui.screens.SplashScreen
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
-
-enum class AppScreen {
-    SPLASH,
-    AUTH,
-    VERIFICATION,
-    STORE_SETUP,
-    DASHBOARD
-}
-
-private suspend fun resolveDestination(sessionPreferences: SessionPreferences): AppScreen {
-    val hasSession = sessionPreferences.authToken.first() != null
-    if (!hasSession) return AppScreen.AUTH
-
-    val verified = sessionPreferences.isVerified.first()
-    if (!verified) return AppScreen.VERIFICATION
-
-    val storeId = sessionPreferences.storeId.first()
-    if (storeId.isNullOrBlank()) return AppScreen.STORE_SETUP
-
-    return AppScreen.DASHBOARD
-}
 
 @Composable
 fun AppNavigation(
-    sessionPreferences: SessionPreferences,
     authEventBus: AuthEventBus,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    splashViewModel: SplashViewModel = hiltViewModel()
 ) {
     val navController = rememberNavController()
-    val scope = rememberCoroutineScope()
 
-    var currentScreen by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(AppScreen.SPLASH) }
-    val isVerified by sessionPreferences.isVerified.collectAsState(initial = false)
-
-    LaunchedEffect(isVerified) {
-        if (currentScreen == AppScreen.SPLASH) {
-            currentScreen = resolveDestination(sessionPreferences)
-        }
-    }
+    val destination by splashViewModel.destination.collectAsState()
 
     LaunchedEffect(authEventBus) {
         authEventBus.sessionExpired.collect {
-            scope.launch {
-                sessionPreferences.clearSession()
-                currentScreen = AppScreen.AUTH
-            }
+            splashViewModel.onLogout()
         }
     }
 
-    when (currentScreen) {
-        AppScreen.SPLASH -> {
+    when (destination) {
+        SplashDestination.Loading -> {
             SplashScreen()
         }
-        AppScreen.AUTH -> {
+        SplashDestination.Auth -> {
             NavHost(
                 navController = navController,
                 startDestination = "sign_in"
@@ -85,9 +51,7 @@ fun AppNavigation(
                             navController.navigate("sign_up")
                         },
                         onLoginSuccess = {
-                            scope.launch {
-                                currentScreen = resolveDestination(sessionPreferences)
-                            }
+                            splashViewModel.loadDestination()
                         }
                     )
                 }
@@ -98,36 +62,31 @@ fun AppNavigation(
                             navController.popBackStack()
                         },
                         onSignUpSuccess = {
-                            scope.launch {
-                                currentScreen = resolveDestination(sessionPreferences)
-                            }
+                            splashViewModel.loadDestination()
                         }
                     )
                 }
             }
         }
-        AppScreen.VERIFICATION -> {
+        SplashDestination.Verification -> {
             VerificationScreen(
                 onVerificationSuccess = {
-                    currentScreen = AppScreen.STORE_SETUP
+                    splashViewModel.loadDestination()
                 }
             )
         }
-        AppScreen.STORE_SETUP -> {
+        SplashDestination.StoreSetup -> {
             StoreScreen(
                 onStoreSuccess = {
-                    currentScreen = AppScreen.DASHBOARD
+                    splashViewModel.loadDestination()
                 },
                 googleMapsApiKey = BuildConfig.MAPS_API_KEY
             )
         }
-        AppScreen.DASHBOARD -> {
+        SplashDestination.Dashboard -> {
             MainDashboardScreen(
                 onLogout = {
-                    scope.launch {
-                        sessionPreferences.clearSession()
-                        currentScreen = AppScreen.AUTH
-                    }
+                    splashViewModel.onLogout()
                 }
             )
         }

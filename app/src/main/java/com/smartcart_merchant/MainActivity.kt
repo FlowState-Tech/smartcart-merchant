@@ -9,7 +9,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.smartcart_merchant.core.network.AuthEventBus
-import com.smartcart_merchant.core.storage.SessionPreferences
 import com.smartcart_merchant.ui.navigation.AppNavigation
 import com.smartcart_merchant.ui.theme.SmartcartmerchantTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,9 +16,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-    @Inject
-    lateinit var sessionPreferences: SessionPreferences
 
     @Inject
     lateinit var authEventBus: AuthEventBus
@@ -33,10 +29,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    AppNavigation(
-                        sessionPreferences = sessionPreferences,
-                        authEventBus = authEventBus
-                    )
+                    AppNavigation(authEventBus = authEventBus)
                 }
             }
         }

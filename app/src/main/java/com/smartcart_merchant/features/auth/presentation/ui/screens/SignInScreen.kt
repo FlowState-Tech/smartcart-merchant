@@ -194,9 +194,9 @@ fun SignInScreen(
                                 Icon(
                                     painter = painterResource(
                                         if (uiState.passwordVisible) {
-                                            android.R.drawable.ic_dialog_info
+                                            R.drawable.visibility_off
                                         } else {
-                                            android.R.drawable.ic_dialog_info
+                                            R.drawable.visibility
                                         }
                                     ),
                                     contentDescription = if (uiState.passwordVisible) "Ocultar contraseña" else "Mostrar contraseña",

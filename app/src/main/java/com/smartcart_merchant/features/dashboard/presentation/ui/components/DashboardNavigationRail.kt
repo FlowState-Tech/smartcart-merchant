@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -27,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.smartcart_merchant.R
 import com.smartcart_merchant.features.dashboard.domain.model.DashboardDestination
 
-private val DarkBlue = Color(0xFF1A237E)
+private val DarkBlue = Color(0xFF080D54)
 private val BrightBlue = Color(0xFF4EA8DE)
 
 @Composable
@@ -40,6 +41,7 @@ fun DashboardNavigationRail(
     Column(
         modifier = modifier
             .fillMaxHeight()
+            .width(80.dp)
             .background(DarkBlue)
             .padding(vertical = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -79,7 +81,7 @@ private fun NavItem(
         contentAlignment = Alignment.Center
     ) {
         Icon(
-            imageVector = destination.icon,
+            painter = painterResource(destination.icon),
             contentDescription = destination.contentDescription,
             tint = Color.White,
             modifier = Modifier.size(24.dp)
@@ -101,7 +103,7 @@ private fun LogoutItem(
         contentAlignment = Alignment.Center
     ) {
         Icon(
-            imageVector = DashboardDestination.logoutIcon,
+            painter = painterResource(DashboardDestination.logoutIcon),
             contentDescription = "Cerrar sesión",
             tint = Color.White.copy(alpha = 0.85f),
             modifier = Modifier.size(24.dp)
@@ -123,7 +125,7 @@ private fun SmartCartLogoItem() {
             contentDescription = "Logo SmartCart",
             modifier = Modifier
                 .size(44.dp)
-                .padding(4.dp),
+                .padding(1.dp),
             contentScale = ContentScale.Fit
         )
     }

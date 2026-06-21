@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.UploadFile
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
@@ -32,9 +30,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.smartcart_merchant.R
 import com.smartcart_merchant.features.dashboard.presentation.state.CatalogProduct
 import com.smartcart_merchant.features.dashboard.presentation.state.StockStatus
 import com.smartcart_merchant.features.dashboard.presentation.ui.components.DashboardActionButton
@@ -119,7 +119,12 @@ fun CatalogManagementSection(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Icon(Icons.Outlined.UploadFile, null, tint = SmartBlue, modifier = Modifier.size(32.dp))
+            Icon(
+                painter = painterResource(R.drawable.upload_file),
+                contentDescription = null,
+                tint = SmartBlue,
+                modifier = Modifier.size(32.dp)
+            )
             Text(
                 text = "CSV: sku,name,brand,categoryId,priceAmount,currency,quantity,minThreshold[,promotional,discount,expiry]",
                 style = MaterialTheme.typography.bodySmall,

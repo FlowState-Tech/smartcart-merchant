@@ -3,7 +3,6 @@ package com.smartcart_merchant.features.dashboard.presentation.viewmodel
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.smartcart_merchant.BuildConfig
 import com.smartcart_merchant.core.common.Resource
 import com.smartcart_merchant.core.storage.SessionPreferences
 import com.smartcart_merchant.core.util.CategoryCatalog
@@ -112,7 +111,7 @@ class DashboardViewModel @Inject constructor(
                         offerDiscounts = offerDiscounts,
                         storeHours = hoursOverride.ifEmpty { it.storeHours },
                         qrLandingUrl = snapshot.storeId?.let { id ->
-                            "${BuildConfig.LANDING_BASE_URL}?store=$id"
+                            "https://flowstatetech-smartcart.netlify.app/?store=$id"
                         }.orEmpty()
                     )
                 }

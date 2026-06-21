@@ -205,7 +205,7 @@ fun DashboardHomeSection(
             }
         }
 
-        DashboardSectionCard(title = "Horarios de atención (US13)") {
+        DashboardSectionCard(title = "Horarios de atención") {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = storeOpenStatus,

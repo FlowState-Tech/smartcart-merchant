@@ -1,58 +1,52 @@
 package com.smartcart_merchant.features.dashboard.domain.model
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Logout
-import androidx.compose.material.icons.outlined.Dashboard
-import androidx.compose.material.icons.outlined.Inventory2
-import androidx.compose.material.icons.outlined.LocalOffer
-import androidx.compose.material.icons.outlined.QrCode2
-import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material.icons.outlined.RateReview
-import androidx.compose.material.icons.outlined.SupportAgent
+
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.smartcart_merchant.R
 
 enum class DashboardDestination(
     val title: String,
-    val icon: ImageVector,
+    val icon: Int,
     val contentDescription: String
 ) {
     DASHBOARD(
         title = "Dashboard",
-        icon = Icons.Outlined.Dashboard,
+        icon = R.drawable.dashboard,
         contentDescription = "Panel principal"
     ),
     CATALOG_MANAGEMENT(
         title = "Gestión de Catálogo",
-        icon = Icons.Outlined.Inventory2,
+        icon = R.drawable.inventory,
         contentDescription = "Gestión de catálogo"
     ),
     OFFER_MANAGEMENT(
         title = "Gestión de Ofertas",
-        icon = Icons.Outlined.LocalOffer,
+        icon = R.drawable.percent_discount,
         contentDescription = "Gestión de ofertas"
     ),
+
     STORE_QR(
         title = "Código QR de la tienda",
-        icon = Icons.Outlined.QrCode2,
+        icon = R.drawable.qr_code,
         contentDescription = "Código QR de la tienda"
     ),
     REVIEWS(
         title = "Reseñas",
-        icon = Icons.Outlined.RateReview,
+        icon = R.drawable.rate_review,
         contentDescription = "Gestión de reseñas"
     ),
     NOTIFICATIONS(
         title = "Notificaciones",
-        icon = Icons.Outlined.Notifications,
+        icon = R.drawable.notifications,
         contentDescription = "Preferencias de notificaciones"
     ),
     SUPPORT(
         title = "Soporte",
-        icon = Icons.Outlined.SupportAgent,
+        icon = R.drawable.support_agent,
         contentDescription = "Soporte"
     );
 
     companion object {
-        val logoutIcon = Icons.AutoMirrored.Outlined.Logout
+        val logoutIcon = R.drawable.logout
     }
 }

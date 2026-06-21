@@ -200,9 +200,9 @@ fun SignUpScreen(
                                 Icon(
                                     painter = painterResource(
                                         if (uiState.passwordVisible) {
-                                            android.R.drawable.ic_dialog_info
+                                            R.drawable.visibility_off
                                         } else {
-                                            android.R.drawable.ic_dialog_info
+                                            R.drawable.visibility
                                         }
                                     ),
                                     contentDescription = if (uiState.passwordVisible) "Ocultar contraseña" else "Mostrar contraseña",
@@ -245,10 +245,10 @@ fun SignUpScreen(
                             IconButton(onClick = viewModel::onConfirmPasswordVisibilityChanged) {
                                 Icon(
                                     painter = painterResource(
-                                        if (uiState.confirmPasswordVisible) {
-                                            android.R.drawable.ic_dialog_info
+                                        if (uiState.passwordVisible) {
+                                            R.drawable.visibility_off
                                         } else {
-                                            android.R.drawable.ic_dialog_info
+                                            R.drawable.visibility
                                         }
                                     ),
                                     contentDescription = if (uiState.confirmPasswordVisible) "Ocultar contraseña" else "Mostrar contraseña",
