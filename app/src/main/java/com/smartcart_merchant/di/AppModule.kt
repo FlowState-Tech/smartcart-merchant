@@ -3,6 +3,7 @@ package com.smartcart_merchant.di
 import android.content.Context
 import com.smartcart_merchant.BuildConfig
 import com.smartcart_merchant.core.network.AuthInterceptor
+import com.smartcart_merchant.core.network.UnauthorizedInterceptor
 import com.smartcart_merchant.core.storage.SessionPreferences
 import com.smartcart_merchant.features.auth.data.remote.api.AuthApi
 import com.smartcart_merchant.features.verification.data.remote.api.VerificationApi
@@ -30,7 +31,10 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(authInterceptor: AuthInterceptor): OkHttpClient {
+    fun provideOkHttpClient(
+        authInterceptor: AuthInterceptor,
+        unauthorizedInterceptor: UnauthorizedInterceptor
+    ): OkHttpClient {
         val loggingInterceptor = HttpLoggingInterceptor().apply {
             level = if (BuildConfig.LOG_HTTP) {
                 HttpLoggingInterceptor.Level.BODY
@@ -42,6 +46,7 @@ object AppModule {
         return OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .addInterceptor(authInterceptor)
+            .addInterceptor(unauthorizedInterceptor)
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)

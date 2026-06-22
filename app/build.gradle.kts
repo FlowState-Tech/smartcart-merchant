@@ -101,8 +101,10 @@ dependencies {
     ksp(libs.androidx.datastore.preferences)
 
     // Google Maps
+    // Google Maps
     implementation(libs.maps.compose)
     implementation(libs.play.services.maps)
+    implementation(libs.zxing.core)
 }
 
 secrets {

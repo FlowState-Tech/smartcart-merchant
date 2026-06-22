@@ -91,6 +91,7 @@ fun StoreScreen(
 
     LaunchedEffect(uiState.isSuccess) {
         if (uiState.isSuccess) {
+            snackbarHostState.showSnackbar("Sucursal registrada correctamente")
             viewModel.onStoreCreated()
             onStoreSuccess()
         }
@@ -121,7 +122,7 @@ fun StoreScreen(
             ) {
                 Card(
                     modifier = Modifier
-                        .weight(1f)
+                        .weight(0.42f)
                         .fillMaxHeight(),
                     shape = RoundedCornerShape(24.dp),
                     colors = CardDefaults.cardColors(
@@ -280,13 +281,13 @@ fun StoreScreen(
                         )
 
                         val days = listOf(
-                            "Monday" to "Lun",
-                            "Tuesday" to "Mar",
-                            "Wednesday" to "Mié",
-                            "Thursday" to "Jue",
-                            "Friday" to "Vie",
-                            "Saturday" to "Sáb",
-                            "Sunday" to "Dom"
+                            "MONDAY" to "Lun",
+                            "TUESDAY" to "Mar",
+                            "WEDNESDAY" to "Mié",
+                            "THURSDAY" to "Jue",
+                            "FRIDAY" to "Vie",
+                            "SATURDAY" to "Sáb",
+                            "SUNDAY" to "Dom"
                         )
 
                         FlowRow(
@@ -401,7 +402,7 @@ fun StoreScreen(
 
                 Card(
                     modifier = Modifier
-                        .weight(1f)
+                        .weight(0.58f)
                         .fillMaxHeight(),
                     shape = RoundedCornerShape(24.dp),
                     colors = CardDefaults.cardColors(

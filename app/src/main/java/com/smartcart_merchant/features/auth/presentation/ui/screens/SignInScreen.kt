@@ -2,6 +2,7 @@ package com.smartcart_merchant.features.auth.presentation.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -44,6 +45,7 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -54,6 +56,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.smartcart_merchant.features.auth.presentation.viewmodel.SignInViewModel
+import com.smartcart_merchant.R
 
 @Composable
 fun SignInScreen(
@@ -115,16 +118,16 @@ fun SignInScreen(
                         modifier = Modifier
                             .size(80.dp)
                             .background(
-                                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                                color = MaterialTheme.colorScheme.surface,
                                 shape = RoundedCornerShape(16.dp)
                             ),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(
-                            text = "SC",
-                            style = MaterialTheme.typography.headlineLarge,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary
+                        Image(
+                            painter = painterResource(R.drawable.smartcart_logo),
+                            contentDescription = "Logo SmartCart",
+                            modifier = Modifier.size(64.dp),
+                            contentScale = ContentScale.Fit
                         )
                     }
 
@@ -191,9 +194,9 @@ fun SignInScreen(
                                 Icon(
                                     painter = painterResource(
                                         if (uiState.passwordVisible) {
-                                            android.R.drawable.ic_dialog_info
+                                            R.drawable.visibility_off
                                         } else {
-                                            android.R.drawable.ic_dialog_info
+                                            R.drawable.visibility
                                         }
                                     ),
                                     contentDescription = if (uiState.passwordVisible) "Ocultar contraseña" else "Mostrar contraseña",

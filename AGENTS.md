@@ -9,7 +9,7 @@ SmartCart Merchant es la aplicación Android para comerciantes de SmartCart. Per
 - Registro e inicio de sesión de comerciantes.
 - Verificación del RUC de la empresa.
 - Registro de sucursales con ubicación en mapa y horarios de atención.
-- Acceso a un dashboard principal.
+- Acceso a un dashboard principal con navegación lateral (NavigationRail) optimizado para tabletas.
 
 ## 2. Stack tecnológico
 
@@ -38,16 +38,19 @@ app/src/main/java/com/smartcart_merchant/
 ├── features/                   # Cada feature es autónomo
 │   ├── auth/                   # Login y registro
 │   ├── verification/           # Verificación de RUC
-│   └── store/                  # Registro de sucursales
-│       ├── data/               # API, DTOs, RepositoryImpl
-│       ├── domain/             # Modelos, Repository interface, UseCases
-│       ├── presentation/       # ViewModel, UiState, Screen, navigation
-│       └── di/                 # Módulo Hilt del feature
+│   ├── store/                  # Registro de sucursales
+│   │   ├── data/
+│   │   ├── domain/
+│   │   ├── presentation/
+│   │   └── di/
+│   └── dashboard/              # Dashboard principal con NavigationRail
+│       ├── domain/             # Modelos (DashboardDestination)
+│       └── presentation/       # ViewModel, UiState, Screen, componentes y secciones
 ├── ui/
 │   ├── navigation/
 │   │   └── AppNavigation.kt    # Navegación top-level (splash, auth, verification, store, dashboard)
 │   ├── screens/
-│   │   ├── AppScreens.kt       # SplashScreen y MainDashboardScreen
+│   │   ├── AppScreens.kt       # SplashScreen y MainDashboardScreen (wrapper del dashboard)
 │   └── theme/                  # Colores, tipografía, tema
 └── MainActivity.kt
 ```
@@ -174,6 +177,7 @@ Store Setup
 - `company_name`
 - `application_id`
 - `ruc`
+- `store_id`
 
 El `AuthInterceptor` lee el token de forma síncrona con `runBlocking` y lo agrega al header `Authorization: Bearer <token>`.
 
@@ -226,6 +230,7 @@ Endpoints conocidos:
 - Auth: `POST auth/sign-in`, `POST auth/sign-up`
 - Verification: `POST verification/verify`
 - Store: `POST store-management/stores`, `GET store-management/stores/{storeId}`
+- Dashboard: `GET store-management/stores/{storeId}/analytics`, `GET .../inventory`, `POST .../inventory/bulk`, `POST .../inventory/clearance`
 
 Nota: Algunos endpoints devuelven respuestas no estandarizadas. Por ejemplo, `POST store-management/stores` devuelve solo el `storeId` como número, no el objeto completo. El repositorio debe manejar esto extrayendo el ID y haciendo un GET posterior si es necesario.
 

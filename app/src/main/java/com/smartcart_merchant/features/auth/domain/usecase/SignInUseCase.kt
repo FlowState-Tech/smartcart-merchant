@@ -10,22 +10,21 @@ class SignInUseCase @Inject constructor(
     private val repository: AuthRepository,
     private val sessionPreferences: SessionPreferences
 ) {
-    operator fun invoke(username: String, password: String) = flow {
+    operator fun invoke(username: String, password: String, rememberMe: Boolean = false) = flow {
         emit(Resource.Loading())
 
-        // Hacemos el login contra el backend
         val result = repository.signIn(username, password)
 
         if (result is Resource.Success && result.data != null) {
             val session = result.data
 
-            // Validamos que el usuario logueado realmente tenga el rol requerido para usar esta app
             if (session.roles.contains("ROLE_MERCHANT")) {
                 sessionPreferences.saveSession(
                     token = session.token,
                     merchantId = session.id,
                     username = session.username
                 )
+                sessionPreferences.saveRememberMe(rememberMe, if (rememberMe) username else null)
                 emit(Resource.Success(session))
             } else {
                 emit(Resource.Error("Acceso denegado: No tienes el rol de Comerciante."))
