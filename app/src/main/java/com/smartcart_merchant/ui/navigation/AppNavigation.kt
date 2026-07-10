@@ -7,7 +7,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
-import com.smartcart_merchant.BuildConfig
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.smartcart_merchant.core.network.AuthEventBus
@@ -79,8 +78,7 @@ fun AppNavigation(
             StoreScreen(
                 onStoreSuccess = {
                     splashViewModel.loadDestination()
-                },
-                googleMapsApiKey = BuildConfig.MAPS_API_KEY
+                }
             )
         }
         SplashDestination.Dashboard -> {

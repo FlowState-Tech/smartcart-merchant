@@ -8,7 +8,6 @@ import com.smartcart_merchant.features.store.presentation.ui.screens.StoreScreen
 
 fun NavGraphBuilder.storeNavGraph(
     navController: NavController,
-    googleMapsApiKey: String,
     onStoreSuccess: () -> Unit
 ) {
     navigation<StoreDestination.StoreSetup>(
@@ -16,8 +15,7 @@ fun NavGraphBuilder.storeNavGraph(
     ) {
         composable<StoreDestination.StoreSetup> {
             StoreScreen(
-                onStoreSuccess = onStoreSuccess,
-                googleMapsApiKey = googleMapsApiKey
+                onStoreSuccess = onStoreSuccess
             )
         }
     }

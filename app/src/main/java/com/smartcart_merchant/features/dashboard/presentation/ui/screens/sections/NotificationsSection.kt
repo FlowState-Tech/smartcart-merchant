@@ -95,7 +95,7 @@ fun NotificationsSection(
             )
         }
 
-        DashboardSectionCard(title = "Alertas de visibilidad (US46)") {
+        DashboardSectionCard(title = "Alertas de visibilidad") {
             Text(
                 text = "Recibe felicitaciones cuando seas el más barato del distrito y avisos si pierdes el liderazgo.",
                 style = MaterialTheme.typography.bodySmall,

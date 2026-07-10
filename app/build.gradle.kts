@@ -4,7 +4,6 @@ plugins {
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.hilt)
-    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -100,14 +99,9 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     ksp(libs.androidx.datastore.preferences)
 
-    // Google Maps
-    // Google Maps
-    implementation(libs.maps.compose)
-    implementation(libs.play.services.maps)
+    // OpenStreetMap
+    implementation(libs.osmdroid.android)
+
     implementation(libs.zxing.core)
 }
 
-secrets {
-    propertiesFileName = "local.properties"
-    defaultPropertiesFileName = "local.defaults.properties"
-}

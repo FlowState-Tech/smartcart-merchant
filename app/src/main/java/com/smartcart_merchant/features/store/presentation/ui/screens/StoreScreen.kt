@@ -37,9 +37,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -49,38 +47,17 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.MapProperties
-import com.google.maps.android.compose.MapUiSettings
-import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.MarkerState
-import com.google.maps.android.compose.rememberCameraPositionState
+import com.smartcart_merchant.features.store.presentation.ui.components.OpenStreetMapView
 import com.smartcart_merchant.features.store.presentation.viewmodel.StoreViewModel
 
 @Composable
 fun StoreScreen(
     onStoreSuccess: () -> Unit,
-    googleMapsApiKey: String,
     viewModel: StoreViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val hoursConfig by viewModel.operatingHoursConfig.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
-
-    val peruLocation = LatLng(-12.0464, -76.9083)
-    val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(peruLocation, 14f)
-    }
-
-    var mapProperties by remember {
-        mutableStateOf(MapProperties(isMyLocationEnabled = false))
-    }
-
-    LaunchedEffect(googleMapsApiKey) {
-        mapProperties = MapProperties(isMyLocationEnabled = false)
-    }
 
     LaunchedEffect(uiState.error) {
         uiState.error?.let { error ->
@@ -439,32 +416,15 @@ fun StoreScreen(
                                 containerColor = Color(0xFFF0F4F8)
                             )
                         ) {
-                            GoogleMap(
-                                modifier = Modifier
-                                    .fillMaxSize(),
-                                cameraPositionState = cameraPositionState,
-                                properties = mapProperties,
-                                uiSettings = MapUiSettings(
-                                    zoomControlsEnabled = true,
-                                    myLocationButtonEnabled = false,
-                                    mapToolbarEnabled = false
-                                ),
-                                onMapClick = { latLng ->
-                                    viewModel.setLocation(latLng.latitude, latLng.longitude)
+                            OpenStreetMapView(
+                                modifier = Modifier.fillMaxSize(),
+                                selectedLatitude = uiState.latitude,
+                                selectedLongitude = uiState.longitude,
+                                markerTitle = uiState.storeName.ifEmpty { "Sucursal" },
+                                onLocationSelected = { lat, lng ->
+                                    viewModel.setLocation(lat, lng)
                                 }
-                            ) {
-                                if (uiState.latitude != null && uiState.longitude != null) {
-                                    Marker(
-                                        state = MarkerState(
-                                            position = LatLng(
-                                                uiState.latitude!!,
-                                                uiState.longitude!!
-                                            )
-                                        ),
-                                        title = uiState.storeName.ifEmpty { "Sucursal" }
-                                    )
-                                }
-                            }
+                            )
                         }
 
                         if (uiState.latitude != null && uiState.longitude != null) {

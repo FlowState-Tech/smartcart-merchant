@@ -142,7 +142,7 @@ fun StoreQrSection(
             }
         }
 
-        DashboardSectionCard(title = "Métricas de alcance (US35)") {
+        DashboardSectionCard(title = "Métricas de alcance") {
             DashboardInfoRow(label = "Visitas landing QR", value = scanCount)
             Spacer(modifier = Modifier.height(8.dp))
             DashboardInfoRow(label = "Landing vinculada", value = if (qrLandingUrl.isBlank()) "No disponible" else "Activa")

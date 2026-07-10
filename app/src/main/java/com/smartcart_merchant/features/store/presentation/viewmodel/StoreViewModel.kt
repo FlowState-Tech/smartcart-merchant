@@ -8,6 +8,7 @@ import com.smartcart_merchant.features.store.domain.model.Address
 import com.smartcart_merchant.features.store.domain.model.OperatingHour
 import com.smartcart_merchant.features.store.domain.model.Store
 import com.smartcart_merchant.features.store.domain.usecase.CreateStoreUseCase
+import com.smartcart_merchant.features.store.domain.usecase.ReverseGeocodeUseCase
 import com.smartcart_merchant.features.store.presentation.state.StoreUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,6 +28,7 @@ data class OperatingHoursConfig(
 @HiltViewModel
 class StoreViewModel @Inject constructor(
     private val createStoreUseCase: CreateStoreUseCase,
+    private val reverseGeocodeUseCase: ReverseGeocodeUseCase,
     private val sessionPreferences: SessionPreferences
 ) : ViewModel() {
 
@@ -67,6 +69,25 @@ class StoreViewModel @Inject constructor(
 
     fun setLocation(latitude: Double?, longitude: Double?) {
         _uiState.update { it.copy(latitude = latitude, longitude = longitude) }
+
+        if (latitude != null && longitude != null) {
+            viewModelScope.launch {
+                when (val result = reverseGeocodeUseCase(latitude, longitude)) {
+                    is Resource.Success -> {
+                        result.data?.let { geocoded ->
+                            _uiState.update { state ->
+                                state.copy(
+                                    street = state.street.ifBlank { geocoded.street },
+                                    district = state.district.ifBlank { geocoded.district }
+                                )
+                            }
+                        }
+                    }
+                    is Resource.Error -> { /* Silencioso: el usuario puede completar manualmente */ }
+                    is Resource.Loading -> { }
+                }
+            }
+        }
     }
 
     fun toggleDay(day: String) {
